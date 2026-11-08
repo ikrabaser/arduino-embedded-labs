@@ -1,6 +1,7 @@
-# Arduino Ödevleri ve Sınav Çalışmaları
+# Arduino Embedded Labs
 
-Gömülü Sistemler dersi için Arduino ile çözülen ödev ve vize hazırlık soruları.
+Gömülü Sistemler dersi için Arduino ile çözülen ödev ve vize hazırlık soruları, ayrıca
+konuların devamı olan ek örnekler (PID, I²C/SPI, watchdog, düşük güç).
 Her sketch kendi klasöründe durur (klasör adı = `.ino` adı), bu yüzden Arduino IDE'de
 doğrudan açılır: **File → Open → ilgili `.ino` dosyası**.
 
