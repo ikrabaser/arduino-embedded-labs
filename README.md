@@ -29,7 +29,8 @@ Kartlar: Arduino Uno (Nano için de geçerli). Uno'da interrupt pinleri **2 ve 3
 | | `crc8_1wire` | CRC-8 (Dallas/Maxim) ödevi, 3 testle (DD, C9, 3A) |
 | | `ds18b20` | Kütüphanesiz DS18B20 sıcaklık okuma |
 | `09_buton_frekans` | `buton_frekans` | 1. buton → 20 Hz, 2. buton → 10 Hz, ikisi birden → sinyal yok (`millis()`) |
-| `10_potansiyometre_adim_motoru` | `pot_adim_motoru` | 2 potansiyometre ile 2 adım motoru (`analogRead`, `map`, wave drive) |
+| `10_potansiyometre_adim_motoru` | `pot_adim_motoru` | v1: 2 potansiyometre ile 2 adım motoru (`analogRead`, `map`, wave drive) |
+| | `pot_adim_motoru_yarim_adim` | v2: yarım adım dizisi, ölü bölge (±10) ve seri monitör çıktısı |
 
 ## Görsel özet
 
@@ -99,7 +100,7 @@ sequenceDiagram
 | `kosu_zamanlayici` | Start → D2, bitiş sensörü → D3 (10 kΩ pull-down) |
 | encoder sketch'leri | Encoder A → D2, B → D3, sürücü puls → D4, direction → D5 |
 | `dc_motor_yon`, `enkoder_hiz_kontrol` | IN1 D4, IN2 D5, PWM D6, STBY D7, enkoder A D2 / B D3 |
-| `pot_adim_motoru` | Pot 1 → A0, Pot 2 → A1, motor 1 → D2–D5, motor 2 → D6–D9 (ULN2003 sürücü üzerinden) |
+| `pot_adim_motoru`, `pot_adim_motoru_yarim_adim` | Pot 1 → A0, Pot 2 → A1, motor 1 → D2–D5, motor 2 → D6–D9 (ULN2003 sürücü üzerinden) |
 | `buton_frekans` | Buton 1 → D2, Buton 2 → D3 (`INPUT_PULLUP`), led → D13 |
 | 1-Wire sketch'leri | Veri hattı → D2, D2 ile 5V arasında 4.7 kΩ pull-up |
 
