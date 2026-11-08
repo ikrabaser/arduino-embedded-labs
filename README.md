@@ -28,6 +28,7 @@ Kartlar: Arduino Uno (Nano için de geçerli). Uno'da interrupt pinleri **2 ve 3
 | | `onewire_read_rom_kisa` | Aynısının kısaltılmış hali |
 | | `crc8_1wire` | CRC-8 (Dallas/Maxim) ödevi, 3 testle (DD, C9, 3A) |
 | | `ds18b20` | Kütüphanesiz DS18B20 sıcaklık okuma |
+| `09_buton_frekans` | `buton_frekans` | 1. buton → 20 Hz, 2. buton → 10 Hz, ikisi birden → sinyal yok (`millis()`) |
 
 ## Pin özetleri
 
@@ -39,6 +40,7 @@ Kartlar: Arduino Uno (Nano için de geçerli). Uno'da interrupt pinleri **2 ve 3
 | `kosu_zamanlayici` | Start → D2, bitiş sensörü → D3 (10 kΩ pull-down) |
 | encoder sketch'leri | Encoder A → D2, B → D3, sürücü puls → D4, direction → D5 |
 | `dc_motor_yon`, `enkoder_hiz_kontrol` | IN1 D4, IN2 D5, PWM D6, STBY D7, enkoder A D2 / B D3 |
+| `buton_frekans` | Buton 1 → D2, Buton 2 → D3 (`INPUT_PULLUP`), led → D13 |
 | 1-Wire sketch'leri | Veri hattı → D2, D2 ile 5V arasında 4.7 kΩ pull-up |
 
 ## Notlar
