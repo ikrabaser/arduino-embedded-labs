@@ -29,6 +29,65 @@ Kartlar: Arduino Uno (Nano için de geçerli). Uno'da interrupt pinleri **2 ve 3
 | | `crc8_1wire` | CRC-8 (Dallas/Maxim) ödevi, 3 testle (DD, C9, 3A) |
 | | `ds18b20` | Kütüphanesiz DS18B20 sıcaklık okuma |
 | `09_buton_frekans` | `buton_frekans` | 1. buton → 20 Hz, 2. buton → 10 Hz, ikisi birden → sinyal yok (`millis()`) |
+| `10_potansiyometre_adim_motoru` | `pot_adim_motoru` | 2 potansiyometre ile 2 adım motoru (`analogRead`, `map`, wave drive) |
+
+## Görsel özet
+
+### Konu haritası
+
+```mermaid
+flowchart LR
+    A["Arduino ödevleri"] --> B["Girişler"]
+    A --> C["Sensörler"]
+    A --> D["Motorlar"]
+    A --> E["Haberleşme"]
+    B --> B1["Buton, millis, kesme<br/>01, 09"]
+    B --> B2["Giriş sayacı<br/>04"]
+    C --> C1["HC-SR04 ürün sayma<br/>02"]
+    C --> C2["Su deposu seviyesi<br/>03"]
+    C --> C3["Koşu zamanlayıcı<br/>05"]
+    D --> D1["Encoder + adım motoru<br/>06"]
+    D --> D2["DC motor + enkoder<br/>07"]
+    D --> D3["Pot + adım motoru<br/>10"]
+    E --> E1["1-Wire, CRC-8, DS18B20<br/>08"]
+```
+
+### HC-SR04 ile ürün sayma (02)
+
+![Bantta ürün sayma](docs/bant_urun_sayma.svg)
+
+![HC-SR04 zamanlaması](docs/hc_sr04_zamanlama.svg)
+
+### Kenar algılama (butonlar ve sayaçlar)
+
+Sayaç, sinyalin **seviyesine** değil **değişimine** bakar. Bu yüzden basılı tutulan buton tek sayılır.
+
+```mermaid
+flowchart TD
+    S(["loop başı"]) --> R["simdiki = digitalRead(pin)"]
+    R --> Q{"simdiki ≠ önceki<br/>ve istenen yöne geçti mi?"}
+    Q -- "evet" --> I["say++"]
+    Q -- "hayır" --> U["önceki = simdiki"]
+    I --> U
+    U --> S
+```
+
+### Pot ile adım motoru (10)
+
+![Potansiyometre ile adım motoru](docs/pot_adim_motoru.svg)
+
+### 1-Wire Read ROM (08)
+
+```mermaid
+sequenceDiagram
+    participant M as Arduino (master)
+    participant S as DS18B20 (slave)
+    M->>S: Reset darbesi (480 µs LOW)
+    S-->>M: Presence darbesi (hat LOW)
+    M->>S: Read ROM komutu (0x33)
+    S-->>M: 8 bayt: family code, 6 bayt seri no, CRC
+    M->>M: crc8() ile CRC doğrula
+```
 
 ## Pin özetleri
 
@@ -40,6 +99,7 @@ Kartlar: Arduino Uno (Nano için de geçerli). Uno'da interrupt pinleri **2 ve 3
 | `kosu_zamanlayici` | Start → D2, bitiş sensörü → D3 (10 kΩ pull-down) |
 | encoder sketch'leri | Encoder A → D2, B → D3, sürücü puls → D4, direction → D5 |
 | `dc_motor_yon`, `enkoder_hiz_kontrol` | IN1 D4, IN2 D5, PWM D6, STBY D7, enkoder A D2 / B D3 |
+| `pot_adim_motoru` | Pot 1 → A0, Pot 2 → A1, motor 1 → D2–D5, motor 2 → D6–D9 (ULN2003 sürücü üzerinden) |
 | `buton_frekans` | Buton 1 → D2, Buton 2 → D3 (`INPUT_PULLUP`), led → D13 |
 | 1-Wire sketch'leri | Veri hattı → D2, D2 ile 5V arasında 4.7 kΩ pull-up |
 
