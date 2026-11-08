@@ -34,6 +34,9 @@ Kartlar: Arduino Uno (Nano için de geçerli). Uno'da interrupt pinleri **2 ve 3
 | `11_pid_motor_hiz` | `pid_hiz_kontrol` | 07'deki aç-kapa kontrolün PID'li hali (Kp, Ki, Kd, anti-windup) *(ek çalışma)* |
 | `12_i2c_spi` | `i2c_mpu6050` | I²C ile MPU6050 ivme/jiroskop/sıcaklık okuma, `Wire.h` *(ek çalışma)* |
 | | `spi_74hc595` | SPI ile 74HC595 üzerinden 8 led sürme, `SPI.h` *(ek çalışma)* |
+| `20_watchdog` | `watchdog_kilitlenme` | Watchdog ile kilitlenmeden kurtarma (`wdt_enable`, `wdt_reset`) *(ek çalışma)* |
+| `21_low_power` | `uyku_kesme_ile_uyanma` | Power-down uykusu, butonla (INT0, LOW) uyanma *(ek çalışma)* |
+| | `uyku_wdt_8sn` | Watchdog kesmesiyle 8 sn'de bir uyanma (pilli sensör düğümü yapısı) *(ek çalışma)* |
 
 ## Görsel özet
 
@@ -56,6 +59,9 @@ flowchart LR
     D --> D4["PID hız kontrolü<br/>11"]
     E --> E1["1-Wire, CRC-8, DS18B20<br/>08"]
     E --> E2["I2C ve SPI<br/>12"]
+    A --> F["Güvenilirlik ve güç"]
+    F --> F1["Watchdog<br/>20"]
+    F --> F2["Uyku modları<br/>21"]
 ```
 
 ### HC-SR04 ile ürün sayma (02)
@@ -110,6 +116,9 @@ sequenceDiagram
 | `pid_hiz_kontrol` | `enkoder_hiz_kontrol` ile aynı: enkoder A D2, IN1 D4, IN2 D5, PWM D6, STBY D7 |
 | `i2c_mpu6050` | SDA → A4, SCL → A5, VCC → 5V, GND → GND, AD0 → GND (adres 0x68) |
 | `spi_74hc595` | MOSI D11 → DS, SCK D13 → SH_CP, D10 → ST_CP (latch), 8 led + 220 Ω |
+| `watchdog_kilitlenme` | Buton → D2 (`INPUT_PULLUP`), led → D13 (dahili) |
+| `uyku_kesme_ile_uyanma` | Buton → D2 (`INPUT_PULLUP`), led → D13 (dahili) |
+| `uyku_wdt_8sn` | Dış bağlantı yok (dahili led D13) |
 | 1-Wire sketch'leri | Veri hattı → D2, D2 ile 5V arasında 4.7 kΩ pull-up |
 
 ## Notlar
@@ -124,8 +133,11 @@ sequenceDiagram
   Tinkercad'de de simüle edilebilir.
 - Tüm sketch'ler derleme öncesi sözdizimi kontrolünden geçirildi. Gerçek kart
   üzerinde yüklenip denenmedi.
-- `11_pid_motor_hiz` ve `12_i2c_spi` dersten gelen sorular değil, 07 ve 08'in devamı olarak
-  yazılan **ek çalışmalardır**. PID mantığı basit bir motor modeliyle simüle edilip doğrulandı;
+- `11_pid_motor_hiz`, `12_i2c_spi`, `20_watchdog` ve `21_low_power` dersten gelen sorular değil,
+  önceki konuların devamı olarak yazılan **ek çalışmalardır**. PID mantığı basit bir motor modeliyle simüle edilip doğrulandı;
   `Kp, Ki, Kd` değerleri örnektir, gerçek motorda ayarlanmalıdır. MPU6050 ve 74HC595 ile
   gerçek donanımda denenmedi.
+  Watchdog ve uyku sketch'leri `avr/wdt.h`, `avr/sleep.h` kullandığı için sadece AVR
+  kartlarda (Uno/Nano) derlenir. Eski bootloader'lı Nano'da watchdog resetinden sonra kart
+  sürekli resetlenebilir. Klasör numaraları (13–19) ileride eklenecek konulara boş bırakıldı.
 - RFID banka/çok imzalı kasa projesi ayrı bir repoda: `rfid-banka-kasa`.
